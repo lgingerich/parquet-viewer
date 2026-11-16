@@ -631,3 +631,18 @@ function landingDiagram() {
 landingDiagram()
 
 addEventListener('resize', () => { if (state && state.view === 'logical' && !$('app').hidden) fitHeads($('logical')) })
+
+// ───────────── theme ─────────────
+// "auto" follows the system; "light"/"dark" override it. Saved in localStorage (applied early by a tiny script in index.html).
+function renderTheme() {
+  const cur = document.documentElement.dataset.theme || 'auto'
+  $('themectl').querySelectorAll('button').forEach(b => { const on = b.dataset.theme === cur; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on) })
+}
+$('themectl').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return
+  const t = b.dataset.theme
+  if (t === 'auto') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = t
+  try { t === 'auto' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t) } catch { /* private mode: still works for this session */ }
+  renderTheme()
+})
+renderTheme()
