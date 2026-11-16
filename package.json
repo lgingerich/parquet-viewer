@@ -1,0 +1,7 @@
+{
+  "name": "parquet-viewer",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.js", "dev": "DEV=1 node --watch server.js" },
+  "dependencies": { "hyparquet": "^1.33.0", "hyparquet-compressors": "^1.1.3" }
+}

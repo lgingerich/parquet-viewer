@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Parquet Viewer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='2' y='3' width='5' height='18' rx='1.5' fill='%232f5bea'/%3E%3Crect x='9.5' y='3' width='5' height='18' rx='1.5' fill='%23f59e0b'/%3E%3Crect x='17' y='3' width='5' height='18' rx='1.5' fill='%2314b8a6'/%3E%3C/svg%3E">
+<script type="importmap">
+{ "imports": { "hysnappy": "/vendor/hysnappy/js/index.js", "fzstd": "/vendor/fzstd/esm/index.mjs" } }
+</script>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" id="home" href="/" title="Back to the start page">
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="5" height="18" rx="1.5" fill="#2f5bea"/><rect x="9.5" y="3" width="5" height="18" rx="1.5" fill="#f59e0b"/><rect x="17" y="3" width="5" height="18" rx="1.5" fill="#14b8a6"/></svg>
+    Parquet Viewer
+  </a>
+  <div class="filechip" id="filechip" hidden><span class="fname" id="fname"></span><span class="fsize" id="fsize"></span></div>
+  <div class="spacer"></div>
+  <div class="actions" id="actions" hidden>
+    <span class="lbl">Examples</span>
+    <div class="segctl" role="group" aria-label="Built-in examples">
+      <button id="ex1" title="Synthetic file using nearly every Parquet feature, written with legacy data page v1">v1 pages</button>
+      <button id="ex2" title="The same data written with data page v2">v2 pages</button>
+    </div>
+    <button class="btn primary" id="open">Upload file…</button>
+  </div>
+  <input type="file" id="picker" hidden>
+</header>
+
+<main>
+  <div id="err" class="alert" role="alert" hidden></div>
+
+  <div id="landing">
+    <div class="hero">
+      <h2>Explore how a Parquet file is organized</h2>
+      <p>Pick a built-in example, or open one of your own.</p>
+    </div>
+    <div class="opts">
+      <div class="opt" id="optv1" role="button" tabindex="0">
+        <span class="tag">Example</span><b>Feature-rich file · data page v1</b>
+        <p>Synthetic, 18,000 rows. Uses nearly every Parquet feature — 5 codecs, 7 encodings, dictionary fallback, bloom filters, page indexes, nested types — with a guide explaining each column. Written with the older v1 page format.</p>
+      </div>
+      <div class="opt" id="optv2" role="button" tabindex="0">
+        <span class="tag">Example</span><b>Same file · data page v2</b>
+        <p>Identical data written with the newer v2 page format, so you can compare page headers side by side with v1.</p>
+      </div>
+      <div class="opt upload" id="upload" role="button" tabindex="0">
+        <span class="tag">Your file</span><b>Upload your own .parquet</b>
+        <p>Drop a file here or click to choose one. It's read locally in your browser — nothing is uploaded anywhere.</p>
+      </div>
+    </div>
+
+    <section class="anatomy" aria-label="Parquet file layout">
+      <h3>How a Parquet file is organized</h3>
+      <div id="anatomy-diagram" aria-hidden="true"></div>
+      <ul class="anat-notes">
+        <li><b>Row group</b>A horizontal slice of the table. Row groups are stacked: each holds the next batch of rows.</li>
+        <li><b>Column chunk</b>One column's values for one row group, stored contiguously. A cell in the grid above.</li>
+        <li><b>Page</b>The unit of encoding and compression. A chunk is a stack of pages, optionally led by a striped <em>dictionary page</em>.</li>
+        <li><b>Footer</b>Written last: schema, offsets, sizes and statistics. Readers start here to find everything else.</li>
+      </ul>
+    </section>
+  </div>
+
+  <div id="app" hidden>
+    <div class="stats" id="stats"></div>
+    <p class="byline" id="byline"></p>
+
+    <div class="section-head">
+      <h2>File structure</h2>
+      <span class="spacer"></span>
+      <div class="ctl"><span class="lbl">View</span>
+        <div class="segctl" id="viewctl" role="group" aria-label="View">
+          <button data-view="logical" class="on" title="Row groups stacked, columns across, pages inside each chunk">Logical</button><button data-view="bytes" title="Every byte in file order, to scale">Byte layout</button>
+        </div></div>
+      <div class="ctl" id="widthctl"><span class="lbl">Column width</span>
+        <div class="segctl" id="widthmode" role="group" aria-label="Column width">
+          <button data-w="equal" class="on">Equal</button><button data-w="size">By size</button>
+        </div></div>
+      <div class="ctl"><span class="lbl">Color by</span>
+        <div class="segctl" id="colorby" role="group" aria-label="Color by">
+          <button data-mode="column" class="on">Column</button><button data-mode="codec">Codec</button><button data-mode="encoding">Encoding</button>
+        </div></div>
+    </div>
+    <p class="structsub" id="structsub"></p>
+    <div id="logical"></div>
+    <div id="bytes" hidden>
+      <div class="rgstrip" id="rgstrip"></div>
+      <div class="map" id="map" role="img" aria-label="Proportional map of the file's bytes"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+
+    <section class="panel">
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <div class="pane" id="pane" role="tabpanel"></div>
+    </section>
+  </div>
+</main>
+<div id="tip"></div>
+<script type="module" src="/app.js"></script>
+</body>
+</html>
