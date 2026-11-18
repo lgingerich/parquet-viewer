@@ -1,6 +1,6 @@
-import { parquetMetadataAsync, parquetReadObjects, readColumnIndex, readOffsetIndex } from '/vendor/hyparquet/src/index.js'
-import { parquetHeader } from '/vendor/hyparquet/src/column.js'
-import { compressors } from '/vendor/hyparquet-compressors/src/index.js'
+import { parquetMetadataAsync, parquetReadObjects, readColumnIndex, readOffsetIndex } from './vendor/hyparquet/src/index.js'
+import { parquetHeader } from './vendor/hyparquet/src/column.js'
+import { compressors } from './vendor/hyparquet-compressors/src/index.js'
 import { $, esc, num, bytes, fmtInt, plain, fmtVal } from './util.js'
 import { ENC_COLOR, CODEC_COLOR, STRUCT_COLOR, columnColor, primaryEncoding, encPill, codecPill } from './colors.js'
 import { mountJson, isCont } from './jsontree.js'
@@ -597,7 +597,7 @@ function kvPane(pane) {
 
 // ───────────── built-in examples & file input ─────────────
 async function loadExample(name) {
-  const r = await fetch('/samples/' + name)
+  const r = await fetch('./samples/' + name)
   if (!r.ok) throw new Error(`Example ${name} not found on the server (HTTP ${r.status})`)
   await load(new File([await r.blob()], name))
 }
