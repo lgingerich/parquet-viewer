@@ -1,13 +1,15 @@
 # Parquet Viewer
 
-A small local web app for seeing how a Parquet file is organized on the inside. Open a file and explore its row groups, column chunks, pages, encodings, compression, statistics, schema and data. Pick one of the built-in examples or open your own `.parquet` file.
+A small web app for seeing how a Parquet file is organized on the inside. Open a file and explore its row groups, column chunks, pages, encodings, compression, statistics, schema and data.
 
-Everything runs in your browser. Files you open are read locally and never uploaded anywhere. Light and dark themes are built in: use the switch in the top right, or leave it on auto to match your system.
+**Try it: [lgingerich.github.io/parquet-viewer](https://lgingerich.github.io/parquet-viewer/)**
+
+Start from one of the built-in examples or drop in your own `.parquet` file. Everything runs in your browser: files you open are read locally and never uploaded anywhere. Light and dark themes are built in: use the switch in the top right, or leave it on auto to match your system.
 
 ![File structure: row groups stacked top to bottom, columns across, pages inside each column chunk](docs/screenshots/structure-light.png#gh-light-mode-only)
 ![File structure: row groups stacked top to bottom, columns across, pages inside each column chunk](docs/screenshots/structure-dark.png#gh-dark-mode-only)
 
-## What it looks like
+## What you can do
 
 ### See how the file is laid out
 
@@ -31,17 +33,7 @@ Switch to the byte view to see every byte of the file in order, to scale.
 
 Two synthetic example files use nearly every Parquet feature: five codecs, seven encodings, dictionary fallback, bloom filters, page indexes, nested types and more. An **Example guide** tab explains what each column demonstrates.
 
-![Example guide](docs/screenshots/example-guide-light.png#gh-light-mode-only)
-![Example guide](docs/screenshots/example-guide-dark.png#gh-dark-mode-only)
-
-### Open your own files
-
-Start from an example, or drop in any `.parquet` file.
-
-![Start page](docs/screenshots/landing-light.png#gh-light-mode-only)
-![Start page](docs/screenshots/landing-dark.png#gh-dark-mode-only)
-
-## Run it
+## Run it locally
 
 You need [Node.js](https://nodejs.org) installed.
 
@@ -51,3 +43,5 @@ npm start
 ```
 
 Then open http://localhost:8765.
+
+Every push to `main` redeploys the hosted version through GitHub Actions (`.github/workflows/pages.yml`).
